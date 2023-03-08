@@ -12,7 +12,7 @@ public class MoveDownExampleV1 {
 
         // Print out array before moveDown call(s)
         System.out.println("Before move:");
-        arr.forEach(element -> {System.out.println(element);});
+        arr.forEach(element -> System.out.println(element));
         System.out.println("*****************");
 
         // Testing the moveDown method manually
@@ -20,6 +20,6 @@ public class MoveDownExampleV1 {
 
         // Print out array after moveDown call(s)
         System.out.println("After move:");
-        arr.forEach(element -> {System.out.println(element);});
+        arr.forEach(element -> System.out.println(element));
     }
 }

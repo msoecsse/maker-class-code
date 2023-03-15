@@ -39,6 +39,12 @@ public class LinkedListTests {
     }
 
     @Test
+    public void givenNewLinkedList_returnExceptionOnAddAtIndexThatDoesNotExist() {
+        LinkedList<String> linkedList = new LinkedList<>();
+        assertThrows(IndexOutOfBoundsException.class, () -> linkedList.add(3, "New String"));
+    }
+
+    @Test
     public void givenNewLinkedList_returnOKOnSet() {
         LinkedList<String> linkedList = new LinkedList<>();
         linkedList.add("New String");

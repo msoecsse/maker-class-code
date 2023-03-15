@@ -53,24 +53,63 @@ public class LinkedList<E> implements List<E> {
 
     @Override
     public E get(int index) {
-        Node node = walkTo(index);
-        if(node==null) {
+        E result = null;
+        if (index == 0 && head != null) {
+            result = head.value;
+        } else if (size() > 0) {
+            ListIterator<E> itr = listIterator(index - 1);
+            result = itr.next();
+        }
+
+        if (result == null) {
             throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + index);
         }
-        return node.value;
+
+        return result;
+
+        // Original class code without iterators:
+        //        Node node = walkTo(index);
+        //        if(node==null) {
+        //            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + index);
+        //        }
+        //
+        //        return null;
     }
 
     @Override
     public E set(int index, E element) {
-        Node node = walkTo(index);
-        if(node==null) {
-            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + index);
+        if (index > size() - 1) {
+            throw new IndexOutOfBoundsException("Index cannot be greater than the size of the linked list");
         }
-        E oldValue = node.value;
-        node.value = element;
-        return oldValue;
+
+        E oldValue;
+
+        if (index == 0 && head != null) {
+            oldValue = head.value;
+
+            head.value = element;
+            return oldValue;
+        } else if (size() > 0) {
+            oldValue = get(index);
+
+            ListIterator<E> itr = listIterator(index);
+            itr.set(element);
+            return oldValue;
+        }
+
+        return null;
+
+        // Original class code without iterators:
+        //        Node node = walkTo(index);
+        //        if(node==null) {
+        //            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + index);
+        //        }
+        //        E oldValue = node.value;
+        //        node.value = element;
+        //        return oldValue;
     }
 
+    // TODO: Try your hand at implementing these methods with iterators
     @Override
     public void add(int index, E element) {
         Node node = walkTo(index);                                 // 1
@@ -200,7 +239,18 @@ public class LinkedList<E> implements List<E> {
     // TODO: Let's implement this together
     @Override
     public int indexOf(Object o) {
-        return 0;
+        int index = 0;
+        ListIterator<E> itr = listIterator();
+        boolean found = false;
+        while(!found && itr.hasNext()) {
+            if (o.equals(itr.next())) {
+                return index;
+            }
+
+            index ++;
+        }
+
+        return -1;
     }
 
     @Override
@@ -238,6 +288,9 @@ public class LinkedList<E> implements List<E> {
         @Override
         public E next() {
             // TODO: Handle error cases
+            if (currentNode == null || !hasNext()) {
+                throw new IndexOutOfBoundsException("");
+            }
             return currentNode.next.value;
         }
 
@@ -249,6 +302,9 @@ public class LinkedList<E> implements List<E> {
         @Override
         public E previous() {
             // TODO: Handle error cases
+            if (currentNode == null || !hasNext()) {
+                throw new IndexOutOfBoundsException("");
+            }
             return currentNode.prev.value;
         }
 

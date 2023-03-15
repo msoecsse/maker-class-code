@@ -1,9 +1,6 @@
 package wk2;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 
 public class LinkedList<E> implements List<E> {
     /**
@@ -38,6 +35,16 @@ public class LinkedList<E> implements List<E> {
         tail = null;
     }
 
+    /**
+     * ***************************************************************
+     *
+     * BASICS COVERED ON MONDAY WITHOUT NEED FOR ITERATORS.
+     *
+     * Any ideas as to why these are implemented without iterators while
+     * other methods below aren't? Can these be implemented with iterators?
+     *
+     * ***************************************************************
+     */
     @Override
     public void clear() {
         head = null;
@@ -81,36 +88,16 @@ public class LinkedList<E> implements List<E> {
     }
 
     @Override
-    public E remove(int index) {
-        return null;
-    }
-
-    @Override
-    public int indexOf(Object o) {
-        return 0;
-    }
-
-    @Override
-    public int lastIndexOf(Object o) {
-        return 0;
-    }
-
-    // TODO: Talk about this on Wednesday
-    @Override
-    public ListIterator<E> listIterator() {
-        return null;
-    }
-
-    // TODO: Talk about this on Wednesday
-    @Override
-    public ListIterator<E> listIterator(int index) {
-        return null;
-    }
-
-    // Leaving this be as is for now
-    @Override
-    public List<E> subList(int fromIndex, int toIndex) {
-        return null;
+    public boolean add(E element) {
+        Node newNode = new Node(element, null, tail);  // 1
+        if(head == null) {
+            head = newNode;                               // 2
+            tail = newNode;                               // 3
+        } else {
+            tail.next = newNode;                          // 4
+            tail = newNode;                               // 5
+        }
+        return true;
     }
 
     @Override
@@ -129,49 +116,192 @@ public class LinkedList<E> implements List<E> {
         return head == null;
     }
 
-    // Leaving this be as is for now, feel free to work with this
-    @Override
-    public boolean contains(Object o) {
-        return false;
+    private Node walkTo(int index) {
+        if(index < 0) {
+            throw new IndexOutOfBoundsException("Index: " + index);
+        }
+        Node walker = head;
+        int i = 0;
+        try {
+            for(; i < index; ++i) {
+                walker = walker.next;
+            }
+        } catch(NullPointerException e) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + i);
+        }
+        return walker;
     }
 
-    // Leaving this be as is for now, feel free to work with this
+    /**
+     * ***************************************************************
+     *
+     * NEW STUFF FOR ITERATORS
+     *
+     * ***************************************************************
+     */
     @Override
     public Iterator<E> iterator() {
-        return null;
-    }
-
-    // Leaving this be as is for now, feel free to work with this
-    @Override
-    public Object[] toArray() {
-        return new Object[0];
-    }
-
-    // Leaving this be as is for now, feel free to work with this
-    @Override
-    public <T> T[] toArray(T[] a) {
-        return null;
+        return new LLIterator();
     }
 
     @Override
-    public boolean add(E element) {
-        Node newNode = new Node(element, null, tail);  // 1
-        if(head == null) {
-            head = newNode;                               // 2
-            tail = newNode;                               // 3
-        } else {
-            tail.next = newNode;                          // 4
-            tail = newNode;                               // 5
+    public ListIterator<E> listIterator() {
+        return new LLIterator();
+    }
+
+    @Override
+    public boolean contains(Object o) {
+        Iterator<E> itr = iterator();
+        boolean found = false;
+        while(!found && itr.hasNext()) {
+            found = o.equals(itr.next());
         }
-        return true;
+        return found;
+    }
+
+    @Override
+    public E remove(int index) {
+        ListIterator<E> itr = listIterator(index);
+        E value = itr.next();
+        itr.remove();
+        return value;
     }
 
     @Override
     public boolean remove(Object o) {
-        return false;
+        boolean removed = false;
+        ListIterator<E> itr = listIterator();
+        while(!removed && itr.hasNext()) {
+            if(o.equals(itr.next())) {
+                itr.remove();
+                removed = true;
+            }
+        }
+        return removed;
     }
 
-    // Leaving this be as is for now, feel free to work with this
+    @Override
+    public ListIterator<E> listIterator(int index) {
+        if(index < 0) {
+            throw new IndexOutOfBoundsException("Index: " + index);
+        }
+        ListIterator<E> itr = new LLIterator();
+        int i = 0;
+        try {
+            for(; i < index; ++i) {
+                itr.next();
+            }
+        } catch(NoSuchElementException e) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + i);
+        }
+        return itr;
+    }
+
+    // TODO: Let's implement this together
+    @Override
+    public int indexOf(Object o) {
+        return 0;
+    }
+
+    @Override
+    public int lastIndexOf(Object o) {
+        int index = size();
+        ListIterator<E> itr = listIterator(index);
+        boolean found = false;
+        while(!found && itr.hasPrevious()) {
+            found = o.equals(itr.previous());
+            --index;
+        }
+        if(!found) {
+            index = -1;
+        }
+        return index;
+    }
+
+    private class LLIterator implements ListIterator<E> {
+
+        private Node currentNode;
+        private int index;
+        private boolean isModifiable;
+
+        private LLIterator() {
+            currentNode = new Node(null, head, null);
+            index = -1;
+            isModifiable = false;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return currentNode.next != null;
+        }
+
+        @Override
+        public E next() {
+            // TODO: Handle error cases
+            return currentNode.next.value;
+        }
+
+        @Override
+        public boolean hasPrevious() {
+            return currentNode.prev != null;
+        }
+
+        @Override
+        public E previous() {
+            // TODO: Handle error cases
+            return currentNode.prev.value;
+        }
+
+        @Override
+        public int nextIndex() {
+            return index + 1;
+        }
+
+        @Override
+        public int previousIndex() {
+            return index - 1;
+        }
+
+        @Override
+        public void remove() {
+            if(!isModifiable) {
+                throw new IllegalStateException("Must call next or previous before remove");
+            }
+            if(currentNode.prev == null) {  // At beginning of list
+                LinkedList.this.head = currentNode.next;        // 1
+            } else {                     // In middle of list
+                currentNode.prev.next = currentNode.next;          // 2
+            }
+            if(currentNode.next == null) {  // At end of list
+                LinkedList.this.tail = currentNode.prev;        // 3
+            } else {                     // In middle of list
+                currentNode.next.prev = currentNode.prev;          // 4
+            }
+            isModifiable = false;
+        }
+
+        @Override
+        public void set(E e) {
+            if(!isModifiable) {
+                throw new IllegalStateException("Must call next or previous before remove");
+            }
+            currentNode.value = e;
+        }
+
+        @Override
+        public void add(E e) {
+            throw new UnsupportedOperationException("ListIterator.add() not supported for this example.");
+        }
+    }
+
+    /**
+     * ***************************************************************
+     *
+     * IGNORED METHODS FOR NOW. TRY IMPLEMNTING THEM FOR YOURSELF AS
+     * A CHALLENGE!
+     *
+     * ***************************************************************
+     */
     @Override
     public boolean containsAll(Collection<?> c) {
         return false;
@@ -201,19 +331,21 @@ public class LinkedList<E> implements List<E> {
         return false;
     }
 
-    private Node walkTo(int index) {
-        if(index < 0) {
-            throw new IndexOutOfBoundsException("Index: " + index);
-        }
-        Node walker = head;
-        int i = 0;
-        try {
-            for(; i < index; ++i) {
-                walker = walker.next;
-            }
-        } catch(NullPointerException e) {
-            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + i);
-        }
-        return walker;
+    // Leaving this be as is for now
+    @Override
+    public List<E> subList(int fromIndex, int toIndex) {
+        return null;
+    }
+
+    // Leaving this be as is for now, feel free to work with this
+    @Override
+    public Object[] toArray() {
+        return new Object[0];
+    }
+
+    // Leaving this be as is for now, feel free to work with this
+    @Override
+    public <T> T[] toArray(T[] a) {
+        return null;
     }
 }

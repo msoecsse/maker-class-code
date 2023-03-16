@@ -28,7 +28,7 @@ public class BigOAnswers {
         }
 
         for (int i = 0; i < list2.length - 1; i++) {
-            list1[i] = 0;
+            list2[i] = 0;
         }
     }
 
@@ -38,7 +38,7 @@ public class BigOAnswers {
     // iterate through the list doing constant time operations so we have at worst n iterations
     public static boolean exampleFunction3(int[] list) {
         Random random = new Random();
-        final int MAGIC_NUMBER = random.nextInt(list.length);
+        final int MAGIC_NUMBER = random.nextInt(list.length + 5);
         int count = 0;
 
         for (int i = 0; i < list.length - 1; i++) {
@@ -59,7 +59,7 @@ public class BigOAnswers {
     // Because we don't rely on the length of the list here this has a constant runtime.
     public static boolean moreEfficientExampleFunction3(int[] list) {
         Random random = new Random();
-        final int MAGIC_NUMBER = random.nextInt(list.length);
+        final int MAGIC_NUMBER = random.nextInt(list.length + 5);
         return list.length > MAGIC_NUMBER;
     }
 

@@ -1,5 +1,7 @@
 package wk2;
 
+import java.util.Random;
+
 public class BigOPractice {
     // TODO: Find T(N) and O(N)
     public static void exampleFunction1(int[] list) {
@@ -24,7 +26,26 @@ public class BigOPractice {
 
     // TODO: Find T(N) and O(N)
     public static boolean exampleFunction3(int[] list) {
-        return list.length > 5;
+        Random random = new Random();
+        final int MAGIC_NUMBER = random.nextInt(list.length);
+        int count = 0;
+
+        for (int i = 0; i < list.length - 1; i++) {
+            count++;
+
+            if (count > MAGIC_NUMBER) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    // TODO: Find T(N) and O(N)
+    public static boolean moreEfficientExampleFunction3(int[] list) {
+        Random random = new Random();
+        final int MAGIC_NUMBER = random.nextInt(list.length);
+        return list.length > MAGIC_NUMBER;
     }
 
     // TODO: Find T(N) and O(N)

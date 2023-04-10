@@ -73,7 +73,7 @@ public class UnitTests {
 
             int expectedResult = Integer.MAX_VALUE; // TODO: Wonder what this should be actually be?
 
-            Assertions.assertEquals(expectedResult, myUnitTestableClass.addTwoInts(num1, num2));
+            Assertions.assertTrue(expectedResult == myUnitTestableClass.addTwoInts(num1, num2));
         }
 
         @Test

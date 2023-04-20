@@ -22,4 +22,26 @@ public class RecursionPractice {
                         // Group sum when first element is used
                         groupSum(list.subList(1, list.size()), target - list.get(0));
     }
+
+    public static int GCD(int n1, int n2) {
+        if (n1 % n2 == 0) {
+            return n2;
+        } else if (n2 % n1 == 0) {
+            return n1;
+        }
+
+        if (n1 > n2) {
+            return GCD(n1 - n2, n2);
+        } else {
+            return GCD(n1, n2 - n1);
+        }
+    }
+
+    public static int GCDAdvanced(int n1, int n2) {
+        if (n2 == 0) {
+            return n1;
+        }
+
+        return GCDAdvanced(n2, n1 % n2);
+    }
 }

@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static exam2.Exam2ImplementationQuestions.isPalindromeSampleTwoStacks;
 import static exam2.Exam2ImplementationQuestions.isPalindromeSampleStackAndQueue;
+import static exam2.Exam2ImplementationQuestions.isPalindromeSampleSingleStack;
 import static exam2.Exam2ImplementationQuestions.GCDSample;
 import static exam2.Exam2ImplementationQuestions.GCDAdvanced;
 
@@ -25,6 +26,15 @@ public class Exam2ImplementationQuestionsTests {
         Assertions.assertTrue(isPalindromeSampleStackAndQueue("Straw? No, too stupid a fad. I put soot on warts."));
         Assertions.assertTrue(isPalindromeSampleStackAndQueue("racecar"));
         Assertions.assertFalse(isPalindromeSampleStackAndQueue("NASCAR"));
+    }
+
+    @Test
+    public void validatesSingleStackIsPalindrome() {
+        Assertions.assertTrue(isPalindromeSampleSingleStack("radar"));
+        Assertions.assertTrue(isPalindromeSampleSingleStack("RaDaR"));
+        Assertions.assertTrue(isPalindromeSampleSingleStack("Straw? No, too stupid a fad. I put soot on warts."));
+        Assertions.assertTrue(isPalindromeSampleSingleStack("racecar"));
+        Assertions.assertFalse(isPalindromeSampleSingleStack("NASCAR"));
     }
 
     @Test

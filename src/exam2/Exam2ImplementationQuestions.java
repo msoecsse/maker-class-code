@@ -56,6 +56,30 @@ public class Exam2ImplementationQuestions {
         return true;
     }
 
+    public static boolean isPalindromeSampleSingleStack(String phrase) {
+        String result = "";
+        String onlyLetterPhrase = "";
+
+        for (Character c : phrase.toCharArray()) {
+            if(Character.isLetter(c)) {
+                onlyLetterPhrase += c;
+            }
+        }
+
+        Stack<Character> stack = new Stack<>();
+        for (char c : phrase.toCharArray()) {
+            if(Character.isLetter(c)) {
+                stack.push(c);
+            }
+        }
+
+        while (!stack.isEmpty()) {
+            result += stack.pop();
+        }
+
+        return onlyLetterPhrase.equalsIgnoreCase(result);
+    }
+
     public static int GCDSample(int n1, int n2) {
         if (n1 % n2 == 0) {
             return n2;

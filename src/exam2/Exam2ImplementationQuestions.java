@@ -86,12 +86,23 @@ public class Exam2ImplementationQuestions {
         } else if (n2 % n1 == 0) {
             return n1;
         }
+//
+//        if (n1 > n2) {
+//            return GCDSample(n1 - n2, n2);
+//        } else {
+//            return GCDSample(n1, n2 - n1);
+//        }
 
-        if (n1 > n2) {
-            return GCDSample(n1 - n2, n2);
-        } else {
-            return GCDSample(n1, n2 - n1);
+        if (n1 % n2 == 0) {
+            return n2;
+        } else if (n2 % n1 == 0) {
+            return n1;
         }
+
+        int min = Math.min(n1, n2);
+        int max = Math.max(n1, n2);
+
+        return GCDSample(max, min - 1);
     }
 
     public static int GCDAdvanced(int n1, int n2) {
